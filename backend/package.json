@@ -7,7 +7,7 @@
     "dev": "bun --watch src/server.ts",
     "start": "bun dist/server.js",
     "test": "bun test",
-    "build": "bun run typecheck && bun build ./src/server.ts --outdir dist --target bun --external sharp",
+    "build": "bun build ./src/server.ts --outdir ./dist",
     "migrate:deploy": "prisma migrate deploy",
     "typecheck": "bun check"
   },
