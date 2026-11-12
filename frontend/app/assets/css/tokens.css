@@ -1,0 +1,71 @@
+/* Hallmark · token export · Console graphite with AssettoDash racing red · v2.0.0 */
+/* Critique · keep the project's red and graphite direction without claiming official Assetto Corsa colours. */
+:root {
+  color-scheme: dark;
+
+  --space-3xs: 2px;
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 40px;
+  --space-2xl: 64px;
+  --space-3xl: 96px;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.2rem;
+  --text-xl: 1.44rem;
+  --text-2xl: 1.728rem;
+  --text-3xl: 2.074rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-micro: 120ms;
+  --dur-short: 220ms;
+  --dur-long: 420ms;
+
+  --container: 1440px;
+  --layout-gutter: clamp(20px, 3.2vw, 48px);
+  --z-sticky-nav: 300;
+  --z-toast: 500;
+
+  --color-paper: oklch(16% 0.008 250);
+  --color-paper-2: oklch(20% 0.009 250);
+  --color-paper-3: oklch(13% 0.007 250);
+  --color-sidebar: oklch(18% 0.009 250);
+  --color-surface-raised: oklch(23% 0.01 250);
+  --color-control: oklch(23% 0.01 250);
+  --color-control-hover: oklch(26% 0.011 250);
+
+  --color-ink: oklch(95% 0.005 250);
+  --color-ink-2: oklch(87% 0.008 250);
+  --color-muted: oklch(74% 0.01 250);
+  --color-rule: oklch(29% 0.01 250);
+  --color-rule-2: oklch(55% 0.012 250);
+
+  --color-accent: oklch(53% 0.18 28);
+  --color-accent-hover: oklch(47% 0.17 28);
+  --color-accent-ink: oklch(99% 0.003 25);
+  --color-accent-text: oklch(69% 0.17 28);
+  --color-accent-soft: oklch(27% 0.065 28);
+  --color-focus: oklch(76% 0.17 28);
+
+  --color-cool: oklch(77% 0.12 245);
+  --color-cool-soft: oklch(29% 0.05 245);
+  --color-ok: oklch(76% 0.13 150);
+  --color-ok-soft: oklch(24.5% 0.03 150);
+  --color-bad: oklch(70% 0.17 25);
+  --color-bad-soft: oklch(24.5% 0.035 25);
+  --color-error: oklch(74% 0.16 27);
+
+  --font-display: ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+  --font-body: var(--font-display);
+  --font-outlier: ui-monospace, "Cascadia Code", "Segoe UI Mono", monospace;
+
+  --radius-card: 8px;
+  --radius-pill: 6px;
+  --rule-hair: 1px;
+  --shadow-card: none;
+}

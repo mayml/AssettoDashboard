@@ -1,0 +1,30 @@
+{
+  "name": "@assetto-dash/backend",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prisma:generate": "prisma generate",
+    "dev": "bun --watch src/server.ts",
+    "start": "bun dist/server.js",
+    "test": "bun test",
+    "build": "bun run typecheck && bun build ./src/server.ts --outdir dist --target bun --external sharp",
+    "migrate:deploy": "prisma migrate deploy",
+    "typecheck": "bun check"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^7.0.2"
+  },
+  "peerDependencies": {
+    "typescript": "^7"
+  },
+  "dependencies": {
+    "@elysia/jwt": "^1.4.2",
+    "@elysiajs/cors": "^1.4.2",
+    "@prisma/adapter-libsql": "^7.10.1",
+    "@prisma/client": "7",
+    "dotenv": "^18.0.9",
+    "elysia": "^1.4.32",
+    "prisma": "7"
+  }
+}

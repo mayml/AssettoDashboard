@@ -1,0 +1,17 @@
+{
+  "name": "AssettoDash",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "dev": "bun run --filter @assetto-dash/frontend dev",
+    "dev:frontend": "bun run --filter @assetto-dash/frontend dev",
+    "build": "bun run --filter @assetto-dash/frontend build",
+    "generate": "bun run --filter @assetto-dash/frontend generate",
+    "preview": "bun run --filter @assetto-dash/frontend preview",
+    "postinstall": "bun run --filter @assetto-dash/frontend prepare"
+  }
+}
