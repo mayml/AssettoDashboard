@@ -2,6 +2,7 @@ import { Elysia, t } from "elysia";
 import { jwtPlugin } from "../../plugins/jwt";
 import { authService } from "./auth.service";
 import { Prisma } from "@prisma/client";
+import { getAuthenticatedUser } from "./auth.guard";
 
 export const authController = new Elysia({ name: "auth" , prefix: "auth"})
     .use(jwtPlugin)
@@ -36,6 +37,7 @@ export const authController = new Elysia({ name: "auth" , prefix: "auth"})
         const token = await jwt.sign({
             sub: result.user.id,
             email: result.user.email,
+            sid: result.sessionId,
         });
 
         return {
@@ -60,6 +62,7 @@ export const authController = new Elysia({ name: "auth" , prefix: "auth"})
         const token = await jwt.sign({
             sub: result.user.id,
             email: result.user.email,
+            sid: result.sessionId,
         });
 
         return {
@@ -77,4 +80,73 @@ export const authController = new Elysia({ name: "auth" , prefix: "auth"})
         {
             body: t.Object({ refreshToken: t.String({ minLength: 1 }) }),
         },
-    );
+    )
+    .get("/me", async ({ headers, jwt, set }) => {
+        const user = await getAuthenticatedUser(headers.authorization, (token) => jwt.verify(token));
+        if (!user) {
+            set.status = 401;
+            return { message: "Нужен действующий access token" };
+        }
+
+        const profile = await authService.getProfile(user.id);
+        if (!profile) {
+            set.status = 404;
+            return { message: "Аккаунт не найден" };
+        }
+
+        return profile;
+    })
+    .post("/password", async ({ headers, body, jwt, set }) => {
+        const user = await getAuthenticatedUser(headers.authorization, (token) => jwt.verify(token));
+        if (!user) {
+            set.status = 401;
+            return { message: "Нужен действующий access token" };
+        }
+
+        const changed = await authService.changePassword(
+            user.id,
+            body.currentPassword,
+            body.newPassword,
+            user.sessionId,
+        );
+        if (!changed) {
+            set.status = 400;
+            return { message: "Текущий пароль указан неверно" };
+        }
+
+        return { message: "Пароль изменён" };
+    }, {
+        body: t.Object({
+            currentPassword: t.String({ minLength: 1, maxLength: 200 }),
+            newPassword: t.String({ minLength: 8, maxLength: 200 }),
+        }),
+    })
+    .get("/sessions", async ({ headers, jwt, set }) => {
+        const user = await getAuthenticatedUser(headers.authorization, (token) => jwt.verify(token));
+        if (!user) {
+            set.status = 401;
+            return { message: "Нужен действующий access token" };
+        }
+
+        return { data: await authService.listSessions(user.id, user.sessionId) };
+    })
+    .delete("/sessions/:id", async ({ headers, params, jwt, set }) => {
+        const user = await getAuthenticatedUser(headers.authorization, (token) => jwt.verify(token));
+        if (!user) {
+            set.status = 401;
+            return { message: "Нужен действующий access token" };
+        }
+
+        if (params.id === user.sessionId) {
+            set.status = 400;
+            return { message: "Чтобы завершить текущий вход, используй кнопку выхода" };
+        }
+
+        const revoked = await authService.revokeSession(user.id, params.id);
+        if (!revoked) {
+            set.status = 404;
+            return { message: "Активный вход не найден" };
+        }
+
+        set.status = 204;
+    }, { params: t.Object({ id: t.String({ minLength: 1 }) }) });

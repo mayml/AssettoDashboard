@@ -9,6 +9,8 @@ const menu = [
   { label: 'Сессии', to: '/session', icon: 'lucide:flag' },
   { label: 'Игроки и результаты', to: '/players', icon: 'lucide:users' },
   { label: 'Моды', to: '/mods', icon: 'lucide:package' },
+  { label: 'Пресеты', to: '/presets', icon: 'lucide:bookmark' },
+  { label: 'Журнал действий', to: '/activity', icon: 'lucide:history' },
 ]
 
 watch(() => route.path, () => {

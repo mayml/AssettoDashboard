@@ -1,5 +1,6 @@
 import { REFRESH_TOKEN_TTL_MS } from "../../config/constants";
 import { prisma } from "../../infra/prisma";
+import { auditService } from "../audit/audit.service";
 
 
 export class AuthService {
@@ -7,7 +8,7 @@ export class AuthService {
         const normalizeEmail = email.trim().toLocaleLowerCase();
         const passwordHash = await Bun.password.hash(password);
 
-        return prisma.user.create({
+        const user = await prisma.user.create({
             data: {
                 email: normalizeEmail,
                 passwordHash,
@@ -19,6 +20,9 @@ export class AuthService {
                 updatedAt: true,
             },
         });
+
+        await auditService.add(user.id, "account_registered", "Создан аккаунт");
+        return user;
     }
 
     async login(email: string, password: string) {
@@ -50,7 +54,8 @@ export class AuthService {
             }
         })
 
-        return { user, refreshToken }
+        await auditService.add(user.id, "login", "Вход в аккаунт");
+        return { user, refreshToken, sessionId };
     }
 
     async refresh(refreshToken: string) {
@@ -102,7 +107,7 @@ export class AuthService {
                 data: { id: newSessionId, userId: session.userId, tokenHash: newTokenHash, expiredAt: newExpiresAt },
             });
 
-            return { user: session.user, refreshToken: newRefreshToken };
+            return { user: session.user, refreshToken: newRefreshToken, sessionId: newSessionId };
             
         });
         return result;
@@ -137,7 +142,61 @@ export class AuthService {
             data: { revokedAt: new Date() },
         });
 
-        return result.count === 1;
+        if (result.count === 1) {
+            await auditService.add(session.userId, "logout", "Выход из аккаунта");
+            return true;
+        }
+        return false;
+    }
+
+    async getProfile(userId: string) {
+        return prisma.user.findUnique({
+            where: { id: userId },
+            select: { id: true, email: true, createdAt: true },
+        });
+    }
+
+    async changePassword(userId: string, currentPassword: string, newPassword: string, currentSessionId: string) {
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+        if (!user || !(await Bun.password.verify(currentPassword, user.passwordHash))) {
+            return false;
+        }
+
+        const passwordHash = await Bun.password.hash(newPassword);
+        await prisma.$transaction([
+            prisma.user.update({ where: { id: userId }, data: { passwordHash } }),
+            prisma.authSession.updateMany({
+                where: { userId, id: { not: currentSessionId }, revokedAt: null },
+                data: { revokedAt: new Date() },
+            }),
+        ]);
+
+        await auditService.add(userId, "password_changed", "Пароль изменён; остальные входы завершены");
+        return true;
+    }
+
+    async listSessions(userId: string, currentSessionId: string) {
+        const sessions = await prisma.authSession.findMany({
+            where: { userId, revokedAt: null, expiredAt: { gt: new Date() } },
+            orderBy: { createdAt: "desc" },
+            select: { id: true, createdAt: true, expiredAt: true },
+        });
+
+        return sessions.map((session) => ({ ...session, isCurrent: session.id === currentSessionId }));
+    }
+
+    async revokeSession(userId: string, sessionId: string) {
+        const result = await prisma.authSession.updateMany({
+            where: { id: sessionId, userId, revokedAt: null, expiredAt: { gt: new Date() } },
+            data: { revokedAt: new Date() },
+        });
+
+        if (result.count === 1) {
+            await auditService.add(userId, "session_revoked", "Завершён другой вход в аккаунт");
+            return true;
+        }
+
+        return false;
     }
 }
 

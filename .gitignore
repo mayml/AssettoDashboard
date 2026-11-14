@@ -5,9 +5,12 @@
 .nitro
 .cache
 dist
+backend/data/*.sqlite
+backend/data/mods/
 
 # Node dependencies
 node_modules
+
 
 # Logs
 logs

@@ -10,6 +10,9 @@ const props = withDefaults(defineProps<{
   disabled?: boolean
   maxlength?: number
   minlength?: number
+  min?: number
+  max?: number
+  step?: number | 'any'
   labelHidden?: boolean
   hint?: string
   error?: string
@@ -36,6 +39,9 @@ const messageId = computed(() => `${props.id}-message`)
         :disabled="disabled"
         :maxlength="maxlength"
         :minlength="minlength"
+        :min="min"
+        :max="max"
+        :step="step"
         :aria-invalid="error ? 'true' : undefined"
         :aria-describedby="error || hint ? messageId : undefined"
       >

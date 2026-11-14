@@ -9,5 +9,6 @@ export const jwtPlugin = jwt({
     schema: t.Object({
         sub: t.String(),
         email: t.String(),
+        sid: t.String(),
     })
 }) 

@@ -258,10 +258,19 @@ button { cursor: pointer; }
 .server-info { display: grid; justify-items: start; gap: var(--space-xs); min-width: 0; }
 .server-info h3 { overflow-wrap: anywhere; }
 .server-info p { color: var(--color-muted); font-size: var(--text-sm); }
+.server-info .server-config-detail { color: var(--color-muted); font-size: var(--text-xs); line-height: 1.45; overflow-wrap: anywhere; }
 .server-roster { color: var(--color-muted); font-size: var(--text-xs); }
 .server-roster { color: var(--color-muted); font-size: var(--text-xs); }
 .server-actions { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-xs); }
 .server-remove { color: var(--color-error); }
+.car-picker { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-xs); margin: 0; padding: 0; border: 0; }
+.car-picker legend { grid-column: 1 / -1; padding: 0; }
+.car-picker-hint { grid-column: 1 / -1; margin-top: calc(-1 * var(--space-2xs)); color: var(--color-muted); font-size: var(--text-xs); }
+.car-option { display: flex; min-width: 0; min-height: 42px; align-items: center; gap: var(--space-xs); padding: var(--space-xs) var(--space-sm); color: var(--color-ink-2); background: var(--color-control); border: 1px solid var(--color-rule); border-radius: var(--radius-card); font-size: var(--text-sm); cursor: pointer; }
+.car-option:has(input:checked) { color: var(--color-ink); background: var(--color-accent-soft); border-color: var(--color-accent); }
+.car-option input { width: 16px; height: 16px; flex: 0 0 auto; accent-color: var(--color-accent); }
+.car-option:focus-within { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.car-picker:disabled .car-option { cursor: not-allowed; opacity: .6; }
 .server-create-dialog { width: min(520px, calc(100vw - 32px)); max-width: none; max-height: calc(100dvh - 32px); overflow-y: auto; margin: auto; padding: var(--space-lg); color: var(--color-ink); background: var(--color-paper-2); border: 1px solid var(--color-rule-2); border-radius: var(--radius-card); box-shadow: 0 18px 48px rgb(0 0 0 / 48%); }
 .server-create-dialog::backdrop { background: rgb(0 0 0 / 68%); backdrop-filter: blur(2px); }
 .server-create-dialog .panel-heading { align-items: flex-start; margin-bottom: var(--space-md); }
@@ -318,6 +327,46 @@ button { cursor: pointer; }
 .profile-card p { margin-bottom: var(--space-sm); color: var(--color-muted); font-size: var(--text-sm); }
 .account-panel h2 { font-size: var(--text-xl); }
 .account-panel p { margin: var(--space-xs) 0 var(--space-md); color: var(--color-muted); font-size: var(--text-sm); line-height: 1.55; }
+.account-security-panel .panel-heading { margin-bottom: var(--space-md); }
+.account-security-panel .panel-heading h2 { font-size: var(--text-lg); }
+.account-security-panel .panel-heading p { margin-top: var(--space-2xs); color: var(--color-muted); font-size: var(--text-sm); line-height: 1.5; }
+.account-password-form { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; gap: var(--space-md); }
+.account-password-form > .btn { grid-column: 1 / -1; justify-self: start; }
+.account-session-list { display: grid; }
+.account-session-row { display: flex; min-width: 0; align-items: center; justify-content: space-between; gap: var(--space-md); padding: var(--space-sm) 0; border-top: 1px solid var(--color-rule); }
+.account-session-row:first-child { border-top: 0; }
+.account-session-row > div { min-width: 0; }
+.account-session-row strong { font-size: var(--text-sm); }
+.account-session-row p { margin-top: var(--space-2xs); color: var(--color-muted); font-size: var(--text-xs); }
+.account-empty-state { padding-block: var(--space-lg); }
+.page-description { margin-top: var(--space-xs); color: var(--color-muted); font-size: var(--text-sm); line-height: 1.5; }
+.preset-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-md); }
+.preset-card { display: grid; align-content: start; gap: var(--space-md); }
+.preset-card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-sm); }
+.preset-card-heading h2 { margin-top: var(--space-sm); font-size: var(--text-lg); overflow-wrap: anywhere; }
+.preset-slots { padding-top: var(--space-2xs); color: var(--color-muted); font-size: var(--text-xs); white-space: nowrap; }
+.preset-track { display: flex; align-items: center; gap: var(--space-xs); color: var(--color-ink-2); font-size: var(--text-sm); }
+.preset-track .app-icon { color: var(--color-accent-text); }
+.preset-car-list { color: var(--color-muted); font-size: var(--text-sm); line-height: 1.45; overflow-wrap: anywhere; }
+.preset-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm); margin: 0; padding: var(--space-sm); background: var(--color-surface-raised); border-radius: var(--radius-card); }
+.preset-facts div { display: grid; min-width: 0; gap: var(--space-2xs); }
+.preset-facts dt { color: var(--color-muted); font-size: var(--text-xs); }
+.preset-facts dd { margin: 0; color: var(--color-ink); font-size: var(--text-sm); overflow-wrap: anywhere; }
+.preset-actions { display: flex; flex-wrap: wrap; gap: var(--space-xs); }
+.preset-dialog { width: min(720px, calc(100vw - 32px)); }
+.preset-form-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.activity-toolbar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-md); margin-bottom: var(--space-md); }
+.activity-toolbar .search-field { display: flex; align-items: center; gap: var(--space-xs); padding-left: var(--space-sm); color: var(--color-muted); background: var(--color-control); border: 1px solid var(--color-rule-2); border-radius: var(--radius-card); }
+.activity-toolbar .text-control { min-height: 42px; border: 0; background: transparent; box-shadow: none; }
+.activity-toolbar .text-control:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; }
+.activity-count { color: var(--color-muted); font-size: var(--text-xs); white-space: nowrap; }
+.activity-list { display: grid; }
+.activity-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: var(--space-sm); padding: var(--space-sm) 0; border-top: 1px solid var(--color-rule); }
+.activity-mark { display: grid; width: 34px; height: 34px; place-items: center; color: var(--color-accent-text); background: var(--color-accent-soft); border-radius: 50%; }
+.activity-copy { min-width: 0; }
+.activity-copy strong { font-size: var(--text-sm); }
+.activity-copy p { margin-top: var(--space-2xs); color: var(--color-muted); font-size: var(--text-xs); overflow-wrap: anywhere; }
+.activity-row time { color: var(--color-muted); font-size: var(--text-xs); text-align: right; }
 .auth-layout { display: grid; min-height: 100vh; min-height: 100svh; place-items: center; overflow-y: auto; padding: var(--space-lg); background: var(--color-paper); }
 .login-form { display: grid; width: min(100%, 448px); gap: var(--space-lg); padding: var(--space-xl); background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: 12px; }
 .login-form.is-register { gap: var(--space-md); padding: var(--space-lg) var(--space-xl); }
@@ -413,6 +462,17 @@ button { cursor: pointer; }
   .server-actions { justify-content: flex-start; flex-wrap: wrap; }
   .session-row { grid-template-columns: minmax(0, 1fr); gap: var(--space-md); }
   .session-row > .btn { grid-column: auto; justify-self: stretch; }
+  .preset-grid { grid-template-columns: minmax(0, 1fr); }
+  .account-password-form { grid-template-columns: minmax(0, 1fr); }
+  .account-password-form > .btn { grid-column: auto; justify-self: stretch; }
+  .preset-form-fields { grid-template-columns: minmax(0, 1fr); }
+  .car-picker { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .activity-row { grid-template-columns: 34px minmax(0, 1fr); }
+  .activity-row time { grid-column: 2; text-align: left; }
+  .activity-toolbar { align-items: stretch; flex-direction: column; }
+  .activity-toolbar .search-field { width: 100%; }
+  .account-session-row { align-items: flex-start; }
+  .account-session-row .btn { flex: 0 0 auto; }
   .player-toolbar { align-items: stretch; flex-direction: column; }
   .search-field { width: 100%; }
   .upload-row { grid-template-columns: minmax(0, 1fr); }
@@ -445,5 +505,6 @@ button { cursor: pointer; }
   .server-facts div { padding-inline: var(--space-xs); }
   .active-session { align-items: flex-start; flex-direction: column; }
   .profile-card { align-items: flex-start; flex-direction: column; }
+  .car-picker { grid-template-columns: minmax(0, 1fr); }
   .toast-stack { right: var(--space-xs); bottom: var(--space-xs); width: calc(100% - var(--space-md)); }
 }

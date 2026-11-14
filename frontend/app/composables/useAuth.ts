@@ -85,6 +85,30 @@ export function useAuth() {
     return loggedOut
   }
 
+  function requireAccessToken() {
+    if (!accessToken.value) throw new Error('Сессия завершилась. Войди в аккаунт ещё раз.')
+    return accessToken.value
+  }
+
+  async function refreshProfile() {
+    const profile = await authService.me(requireAccessToken())
+    user.value = profile
+    return profile
+  }
+
+  function changePassword(currentPassword: string, newPassword: string) {
+    return authService.changePassword(requireAccessToken(), currentPassword, newPassword)
+  }
+
+  async function loadSessions() {
+    const response = await authService.sessions(requireAccessToken())
+    return response.data
+  }
+
+  function revokeSession(sessionId: string) {
+    return authService.revokeSession(requireAccessToken(), sessionId)
+  }
+
   return {
     accessToken: readonly(accessToken),
     user: readonly(user),
@@ -93,5 +117,9 @@ export function useAuth() {
     register,
     restoreSession,
     logout,
+    refreshProfile,
+    changePassword,
+    loadSessions,
+    revokeSession,
   }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 const props = withDefaults(defineProps<{
   itemName: string
-  itemType?: 'мод' | 'сервер'
+  itemType?: 'мод' | 'сервер' | 'пресет'
   busy?: boolean
 }>(), {
   itemType: 'мод',
@@ -49,7 +49,7 @@ function handleBackdrop(event: MouseEvent) {
   >
     <h2 id="confirm-dialog-title">Удалить {{ itemType }}?</h2>
     <p id="confirm-dialog-description">
-      {{ itemType === 'сервер' ? 'Сервер' : 'Мод' }} «{{ itemName }}» будет удалён из списка. Это действие нельзя отменить.
+      {{ itemType === 'сервер' ? 'Сервер' : itemType === 'пресет' ? 'Пресет' : 'Мод' }} «{{ itemName }}» будет удалён из списка. Это действие нельзя отменить.
     </p>
     <div class="confirm-dialog-actions">
       <button class="btn" type="button" :disabled="busy" autofocus @click="open = false">Отмена</button>

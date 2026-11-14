@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useAuth } from '~/composables/useAuth'
 import { normalizeDataError } from '~/services/dataError'
 
 const props = defineProps<{ mode: 'login' | 'register' }>()

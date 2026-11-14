@@ -13,7 +13,11 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  session AuthSession[] 
+  session AuthSession[]
+  serverConfigs ServerConfig[]
+  presets SessionPreset[]
+  auditLogs AuditLog[]
+  uploadedMods UploadedMod[]
 
   @@map("users")
 }
@@ -31,4 +35,103 @@ model AuthSession {
     @@index([userId])
     @@index([expiredAt])
     @@map("auth_sessions")
+}
+
+model ServerConfig {
+    id String @id @default(cuid())
+    userId String @map("user_id")
+    name String
+    track String
+    trackConfig String @default("GP") @map("track_config")
+    mode String
+    slots Int
+    practiceMinutes Int @default(20) @map("practice_minutes")
+    qualifyingMinutes Int @default(10) @map("qualifying_minutes")
+    raceLaps Int @default(5) @map("race_laps")
+    weather String @default("Солнечно")
+    timeOfDay String @default("14:00") @map("time_of_day")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    cars ServerConfigCar[]
+
+    @@index([userId])
+    @@map("server_configs")
+}
+
+model ServerConfigCar {
+    id String @id @default(cuid())
+    serverConfigId String @map("server_config_id")
+    car String
+
+    serverConfig ServerConfig @relation(fields: [serverConfigId], references: [id], onDelete: Cascade)
+
+    @@unique([serverConfigId, car])
+    @@index([serverConfigId])
+    @@map("server_config_cars")
+}
+
+model SessionPreset {
+    id String @id @default(cuid())
+    userId String @map("user_id")
+    name String
+    track String
+    trackConfig String @default("GP") @map("track_config")
+    mode String
+    slots Int
+    practiceMinutes Int @default(20) @map("practice_minutes")
+    qualifyingMinutes Int @default(10) @map("qualifying_minutes")
+    raceLaps Int @default(5) @map("race_laps")
+    weather String @default("Солнечно")
+    timeOfDay String @default("14:00") @map("time_of_day")
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    cars PresetCar[]
+
+    @@index([userId])
+    @@map("session_presets")
+}
+
+model PresetCar {
+    id String @id @default(cuid())
+    presetId String @map("preset_id")
+    car String
+
+    preset SessionPreset @relation(fields: [presetId], references: [id], onDelete: Cascade)
+
+    @@unique([presetId, car])
+    @@index([presetId])
+    @@map("session_preset_cars")
+}
+
+model UploadedMod {
+    id String @id @default(cuid())
+    userId String @map("user_id")
+    name String
+    originalName String @map("original_name")
+    fileKey String @unique @map("file_key")
+    extension String
+    sizeBytes Int @map("size_bytes")
+    createdAt DateTime @default(now()) @map("created_at")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId, createdAt])
+    @@map("mods")
+}
+
+model AuditLog {
+    id String @id @default(cuid())
+    userId String @map("user_id")
+    action String
+    details String
+    createdAt DateTime @default(now()) @map("created_at")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@index([userId, createdAt])
+    @@map("audit_logs")
 }
